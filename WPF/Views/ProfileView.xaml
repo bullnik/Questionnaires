@@ -3,36 +3,58 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WPF.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.2*"/>
-            <RowDefinition Height="0.2*"/>
-            <RowDefinition Height="0.2*"/>
-            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.8*"/>
             <RowDefinition Height="0.2*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.5*"/>
-            <ColumnDefinition Width="0.5*"/>
-        </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Content="Имя" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
-        <Label Grid.Row="1" Content="Фамилия" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
-        <Label Grid.Row="2" Content="Возраст" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
-        <Label Grid.Row="3" Content="Профессия" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding CurrentProfile.FirstName}"
+        
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.25*"/>
+                <RowDefinition Height="0.25*"/>
+                <RowDefinition Height="0.25*"/>
+                <RowDefinition Height="0.25*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Content="Имя" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
+            <Label Grid.Row="1" Content="Фамилия" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
+            <Label Grid.Row="2" Content="Возраст" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
+            <Label Grid.Row="3" Content="Профессия" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding CurrentProfile.FirstName}"
+                 HorizontalContentAlignment="Left" VerticalContentAlignment="Center" 
+                 FontSize="40" IsEnabled="{Binding IsChangingEnable}"/>
+            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding CurrentProfile.LastName}" 
+                 IsEnabled="{Binding IsChangingEnable}"
                  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="40"/>
-        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding CurrentProfile.LastName}" 
+            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding CurrentProfile.Age}" 
+                 IsEnabled="{Binding IsChangingEnable}"
                  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="40"/>
-        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding CurrentProfile.Age}" 
+            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding CurrentProfile.Job}"
+                 IsEnabled="{Binding IsChangingEnable}"
                  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="40"/>
-        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding CurrentProfile.Job}"
-                 HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="40"/>
-        <Button Content="Back" Grid.Column="0" Command="{Binding Back}"
-                Grid.Row="4" FontSize="50" Click="Button_Click"/>
-        <Button Content="Save" Grid.Column="1" Grid.Row="4" FontSize="50" 
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="Back" Command="{Binding Back}"
+                FontSize="50" Click="Button_Click"/>
+            <Button Grid.Column="1" Content="Edit" FontSize="50"
+                IsEnabled="{Binding IsEditButtonEnable}"
+                Command="{Binding EditCurrentProfile}"/>
+            <Button Grid.Column="2" Content="Save" FontSize="50"
+                IsEnabled="{Binding IsChangingEnable}"
                 Command="{Binding SaveCurrentProfile}"/>
+        </Grid>
     </Grid>
 </UserControl>

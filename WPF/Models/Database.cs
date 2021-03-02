@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -7,6 +6,7 @@ namespace WPF.Models
 {
     public class Database
     {
+        private FileStream Stream { get; set; }
         /// <summary>
         /// Database - folder "Profiles" near executable file.
         /// </summary>
@@ -50,7 +50,7 @@ namespace WPF.Models
         /// <summary>
         /// To make full path to .dat file.
         /// </summary>
-        private string MakePathToProfile(string profileName)
+        public string MakePathToProfile(string profileName)
         {
             return Path + '\\' + profileName + ".dat";
         }
@@ -64,7 +64,9 @@ namespace WPF.Models
             {
                 using (BinaryWriter writer = new BinaryWriter(
                     File.Open(MakePathToProfile(profileName), 
-                    FileMode.OpenOrCreate)))
+                    FileMode.OpenOrCreate, 
+                    FileAccess.ReadWrite, 
+                    FileShare.None)))
                 {
                     writer.Write(profile.FirstName);
                     writer.Write(profile.LastName);
@@ -87,7 +89,9 @@ namespace WPF.Models
         {
             using (BinaryReader reader = new BinaryReader(
                 File.Open(MakePathToProfile(profileName), 
-                FileMode.Open)))
+                FileMode.Open, 
+                FileAccess.Read, 
+                FileShare.Read)))
             {
                 string firstName = reader.ReadString();
                 string lastName = reader.ReadString();
@@ -134,6 +138,68 @@ namespace WPF.Models
         public void CreateFolder()
         {
             Directory.CreateDirectory(Path);
+        }
+        /// <summary>
+        /// Protect the file from editing or reading.
+        /// </summary>
+        public void LockProfile(string profileName, FileShare fileShareMode)
+        {
+            if (fileShareMode == FileShare.None)
+            {
+                Stream = File.Open(MakePathToProfile(profileName),
+                                    FileMode.Open,
+                                    FileAccess.ReadWrite,
+                                    FileShare.None);
+            }
+            else if (fileShareMode == FileShare.Read)
+            {
+                Stream = File.Open(MakePathToProfile(profileName),
+                                    FileMode.Open,
+                                    FileAccess.Read,
+                                    FileShare.Read);
+            }
+        }
+        /// <summary>
+        /// Unlock locked file.
+        /// </summary>
+        public void UnlockProfile(string profileName)
+        {
+            if (Stream != null)
+            {
+                Stream.Close();
+            }
+            Stream = null;
+        }
+        /// <summary>
+        /// Returns current access to file.
+        /// </summary>
+        public FileShare GetProfileAccessType(string profileName)
+        {
+            try
+            {
+                FileStream a = File.Open(MakePathToProfile(profileName),
+                                        FileMode.Open,
+                                        FileAccess.ReadWrite, 
+                                        FileShare.ReadWrite);
+                a.Close();
+                return FileShare.ReadWrite;
+            }
+            catch
+            {
+                try
+                {
+                    FileStream a = File.Open(MakePathToProfile(profileName),
+                                            FileMode.Open,
+                                            FileAccess.Read,
+                                            FileShare.Read);
+                    a.Close();
+                    return FileShare.Read;
+                }
+                catch
+                {
+                    return FileShare.None;
+                }
+            }
         }
     }
 }
