@@ -13,17 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WPF
+namespace WPF.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Логика взаимодействия для ProfileView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ProfileView : UserControl
     {
-        public MainWindow()
+        public ProfileView()
         {
             InitializeComponent();
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
