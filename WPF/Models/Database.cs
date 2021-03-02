@@ -30,7 +30,18 @@ namespace WPF.Models
                 {
                     if (file.Substring(file.Length - 4, 4).Equals(".dat"))
                     {
-                        profiles.Add(file);
+                        int fileIndex = 0;
+                        int fileNameLength = 0;
+                        for (int i = file.Length - 1; i > 0; i--)
+                        {
+                            fileNameLength++;
+                            if (file[i] == '\\')
+                            {
+                                fileIndex = i + 1;
+                                break;
+                            }
+                        }
+                        profiles.Add(file.Substring(fileIndex, fileNameLength - 5));
                     }
                 }
                 return profiles;

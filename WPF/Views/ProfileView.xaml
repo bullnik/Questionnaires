@@ -18,15 +18,21 @@
             <ColumnDefinition Width="0.5*"/>
             <ColumnDefinition Width="0.5*"/>
         </Grid.ColumnDefinitions>
-        <Label  Grid.Row="0" Content="Имя" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
-        <Label  Grid.Row="1" Content="Фамилия" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
-        <Label  Grid.Row="2" Content="Возраст" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
-        <Label  Grid.Row="3" Content="Профессия" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
-        <TextBox Grid.Column="1" Grid.Row="0" Text="DD" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="40"/>
-        <TextBox Grid.Column="1" Grid.Row="1" Text="DD" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="40"/>
-        <TextBox Grid.Column="1" Grid.Row="2" Text="DD" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="40"/>
-        <TextBox Grid.Column="1" Grid.Row="3" Text="DD" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="40"/>
-        <Button  Content="Back" Grid.Column="0" Grid.Row="4" FontSize="50" Click="Button_Click"/>
-        <Button  Content="Save" Grid.Column="1" Grid.Row="4" FontSize="50"/>
+        <Label Grid.Row="0" Content="Имя" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
+        <Label Grid.Row="1" Content="Фамилия" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
+        <Label Grid.Row="2" Content="Возраст" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
+        <Label Grid.Row="3" Content="Профессия" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="40"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding CurrentProfile.FirstName}"
+                 HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="40"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding CurrentProfile.LastName}" 
+                 HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="40"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding CurrentProfile.Age}" 
+                 HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="40"/>
+        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding CurrentProfile.Job}"
+                 HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontSize="40"/>
+        <Button Content="Back" Grid.Column="0" Command="{Binding Back}"
+                Grid.Row="4" FontSize="50" Click="Button_Click"/>
+        <Button Content="Save" Grid.Column="1" Grid.Row="4" FontSize="50" 
+                Command="{Binding SaveCurrentProfile}"/>
     </Grid>
 </UserControl>

@@ -32,8 +32,12 @@
                                 <ColumnDefinition Width="0.8*"/>
                                 <ColumnDefinition Width="0.2*"/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="{Binding FileName}" HorizontalContentAlignment="Center"/>
-                            <Button Grid.Column="1" Content="Open" Command="{Binding OpenProfile}" CommandParameter="{Binding FileName}"/>
+                            <Label Grid.Column="0" Content="{Binding FileName}" 
+                                   HorizontalContentAlignment="Center" FontSize="20"/>
+                            <Button Grid.Column="1" Content="Open"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, 
+                                    Path=DataContext.OpenProfile}" Background="White"
+                                    CommandParameter="{Binding FileName}"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -41,9 +45,10 @@
         </Grid>
 
 
-        <Button Grid.Row="2" Content="  Add new profile  " 
+        <Button Grid.Row="2" Content="         Add new profile         " 
                 HorizontalAlignment="Center"
                 FontSize="24" Background="White" BorderThickness="2"
-                VerticalContentAlignment="Center"/>
+                VerticalContentAlignment="Center"
+                Command="{Binding CreateNewProfile}"/>
     </Grid>
 </UserControl>

@@ -11,8 +11,12 @@ namespace WPF.ViewModels
     public class MainViewModel : BindableBase
     {
         public DelegateCommand<string> OpenProfile { get; set; }
+        public DelegateCommand CreateNewProfile { get; set; }
+        public DelegateCommand Back { get; set; }
+        public DelegateCommand SaveCurrentProfile { get; set; }
         public ObservableCollection<File> Profiles { get; set; }
         public Profile CurrentProfile { get; set; }
+        public string CurrentProfileName { get; set; }
         private Database Database { get; set; }
         public Visibility SelectProfileVisibility { get; set; }
         public Visibility ProfileViewVisibility { get; set; }
@@ -21,20 +25,56 @@ namespace WPF.ViewModels
         {
             Database = new Database();
             Profiles = new ObservableCollection<File>();
-            Profiles.Add(new File("test1"));
-            Profiles.Add(new File("test2"));
+            Back = new DelegateCommand(() =>
+            {
+                CurrentProfile = null;
+                CurrentProfileName = null;
+                ShowSelectionProfile();
+                UpdateFiles();
+                UpdateProfile();
+            });
+            SaveCurrentProfile = new DelegateCommand(() =>
+            {
+                if (CurrentProfileName == null)
+                {
+                    CurrentProfileName = CurrentProfile.FirstName + '-' + CurrentProfile.LastName;
+                }
+                Database.EditOrCreateNewProfile(CurrentProfileName, CurrentProfile);
+            });
             OpenProfile = new DelegateCommand<string>((string str) =>
             {
+                CurrentProfileName = str;
                 CurrentProfile = Database.ReadProfileByName(str);
-                SelectProfileVisibility = Visibility.Hidden;
-                ProfileViewVisibility = Visibility.Visible;
-                RaisePropertyChanged("SelectProfileVisibility");
-                RaisePropertyChanged("ProfileViewVisibility");
+                ShowProfileView();
+                UpdateProfile();
             });
-
+            CreateNewProfile = new DelegateCommand(() =>
+            {
+                CurrentProfile = new Profile("", "", 0, "");
+                ShowProfileView();
+                UpdateProfile();
+            });
             SelectProfileVisibility = Visibility.Visible;
             ProfileViewVisibility = Visibility.Hidden;
-            //UpdateFiles();
+            UpdateFiles();
+        }
+        private void UpdateProfile()
+        {
+            RaisePropertyChanged("CurrentProfile");
+        }
+        private void ShowProfileView()
+        {
+            SelectProfileVisibility = Visibility.Hidden;
+            ProfileViewVisibility = Visibility.Visible;
+            RaisePropertyChanged("SelectProfileVisibility");
+            RaisePropertyChanged("ProfileViewVisibility");
+        }
+        private void ShowSelectionProfile()
+        {
+            SelectProfileVisibility = Visibility.Visible;
+            ProfileViewVisibility = Visibility.Hidden;
+            RaisePropertyChanged("SelectProfileVisibility");
+            RaisePropertyChanged("ProfileViewVisibility");
         }
         /// <summary>
         /// Verify profiles with database.
@@ -47,8 +87,8 @@ namespace WPF.ViewModels
             {
                 Profiles.Add(new File(profile));
             }
+            RaisePropertyChanged("Profiles");
         }
-
 
         public void ReadProfile(string fileName)
         {

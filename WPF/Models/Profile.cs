@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Prism.Mvvm;
 
 namespace WPF.Models
 {
-    public class Profile
+    public class Profile : BindableBase
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
