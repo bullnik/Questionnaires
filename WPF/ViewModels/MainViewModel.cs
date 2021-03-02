@@ -48,7 +48,7 @@ namespace WPF.ViewModels
             Profiles = new ObservableCollection<File>();
             Back = new DelegateCommand(() =>
             {
-                Database.UnlockProfile(CurrentProfileName);
+                Database.UnlockProfile();
                 CurrentProfile = null;
                 CurrentProfileName = null;
                 IsChangingEnable = false;
@@ -58,16 +58,20 @@ namespace WPF.ViewModels
             });
             EditCurrentProfile = new DelegateCommand(() =>
             {
-                if (Database.GetProfileAccessType(CurrentProfileName) 
-                        == System.IO.FileShare.ReadWrite)
+                Database.UnlockProfile();
+                System.IO.FileShare access = Database.GetProfileAccessType(CurrentProfileName);
+                if (access == System.IO.FileShare.ReadWrite)
                 {
-                    Database.UnlockProfile(CurrentProfileName);
                     Database.LockProfile(CurrentProfileName, System.IO.FileShare.None);
                     IsChangingEnable = true;
                 }
                 else
                 {
                     MessageBox.Show("Access denied", "Information");
+                    if (access == System.IO.FileShare.Read)
+                    {
+                        Database.LockProfile(CurrentProfileName, System.IO.FileShare.Read);
+                    }
                 }
             });
             SaveCurrentProfile = new DelegateCommand(() =>
@@ -76,9 +80,10 @@ namespace WPF.ViewModels
                 {
                     CurrentProfileName = CurrentProfile.FirstName + '-' + CurrentProfile.LastName;
                 }
-                Database.UnlockProfile(CurrentProfileName);
+                Database.UnlockProfile();
                 Database.EditOrCreateNewProfile(CurrentProfileName, CurrentProfile);
                 IsChangingEnable = false;
+                Database.LockProfile(CurrentProfileName, System.IO.FileShare.Read);
             });
             OpenProfile = new DelegateCommand<string>((string str) =>
             {

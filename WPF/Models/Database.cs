@@ -160,9 +160,9 @@ namespace WPF.Models
             }
         }
         /// <summary>
-        /// Unlock locked file.
+        /// Unlock previous locked file.
         /// </summary>
-        public void UnlockProfile(string profileName)
+        public void UnlockProfile()
         {
             if (Stream != null)
             {
