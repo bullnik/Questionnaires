@@ -9,27 +9,35 @@ namespace WPF.ViewModels
 {
     public class MainViewModel : BindableBase
     {
-        private DelegateCommand a { get; set; }
-        private ObservableCollection<File> Profiles { get; set; }
-        private Database database { get; set; }
+        public DelegateCommand OpenProfile { get; set; }
+        public ObservableCollection<File> Profiles { get; set; }
+        public Profile CurrentProfile { get; set; }
+        private Database Database { get; set; }
 
         public MainViewModel()
         {
-            database = new Database();
+            Database = new Database();
             Profiles = new ObservableCollection<File>();
-            UpdateFiles();
+            Profiles.Add(new File("test1"));
+            Profiles.Add(new File("test2"));
+            //UpdateFiles();
         }
         /// <summary>
         /// Verify profiles with database.
         /// </summary>
         public void UpdateFiles()
         {
-            List<string> profiles = database.Profiles;
+            List<string> profiles = Database.Profiles;
             Profiles.Clear();
             foreach(string profile in profiles)
             {
                 Profiles.Add(new File(profile));
             }
+        }
+
+        public void ReadProfile(string fileName)
+        {
+            CurrentProfile = Database.ReadProfileByName(fileName);
         }
     }
 
